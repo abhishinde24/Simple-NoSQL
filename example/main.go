@@ -16,7 +16,10 @@ func main() {
 	db.Set("a1",[]byte("A1"))
 	db.Set("a1",[]byte("Z1"))
 	db.Set("b1",[]byte("B1"))
-	db.Set("c1",[]byte("C1"))
+	db.Set("cz1",[]byte("C1"))
+	db.Set("dz1",[]byte("D1"))
+	db.Set("bz1",[]byte("B1"))
+	db.Set("cz1",[]byte("C1"))
 	db.Set("d1",[]byte("D1"))
 
 	value, err := db.Get("a1")
