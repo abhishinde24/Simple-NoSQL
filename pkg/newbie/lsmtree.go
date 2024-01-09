@@ -9,9 +9,13 @@ type LSMTree struct {
 	SSTables []*SSTable
 }
 
+func (lsm* LSMTree) length()(int){
+	return	len(lsm.SSTables)	 
+}
+
 func initLSMTree() *LSMTree {
 	activeDataFiles := find(DATAPATH,".newbie")
-	// sorting file paths
+		// sorting file paths
 	sort.Strings(activeDataFiles)
 
 	lsmTree := &LSMTree{
@@ -28,3 +32,31 @@ func initLSMTree() *LSMTree {
 	return lsmTree
 }
 
+func (lsm* LSMTree)compactLSMTree(){
+	var n = lsm.length()
+
+	if n < 2{
+		return
+	}
+
+	// mergering consecutive SStable
+	var sstables []*SSTable
+	for i := 1; i < n ; i+=2 {
+
+		sstable, err := MergeSSTable(*lsm.SSTables[i-1],*lsm.SSTables[i])
+		if err != nil {
+			panic(fmt.Errorf("Error - %s \n",err))
+		}
+		sstables = append(sstables,sstable)
+		lsm.SSTables[i].fd.Close()
+		lsm.SSTables[i - 1].fd.Close()
+		lsm.SSTables[i].DeleteSSTable()
+		lsm.SSTables[i - 1].DeleteSSTable()
+
+	}
+	if n % 2 != 0{
+		sstables = append(sstables,lsm.SSTables[n-1])
+	}
+
+	lsm.SSTables = sstables
+}
