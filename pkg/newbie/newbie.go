@@ -80,3 +80,12 @@ func (db *DB)Delete(key string)(error){
 	}
 	return nil
 }
+
+func (db *DB)Close()(error){
+
+	FlushMemTableToSSTable(DATAPATH,&db.mem_table)
+	db.lsm_tree.SSTables = nil 
+	db.mem_table.Clear()
+
+	return nil
+}

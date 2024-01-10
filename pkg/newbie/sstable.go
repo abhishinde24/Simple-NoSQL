@@ -88,6 +88,7 @@ func make_persistent_sstable(base_path string)(*SSTable){
 			fmt.Println("error while checking ",err)
 			panic(fmt.Sprintf("Error while checking file exist or not , File path %v",sstable_filepath))
 		}
+		currentTime = time.Now().UnixNano()
 	}
 
 	return NewSSTable(sstable_filepath,nil)
@@ -172,7 +173,7 @@ func (s* SSTable)GetSliceOfSSTableEntry()([]*SSTableEntry){
     fileScanner.Split(bufio.ScanLines)	
 	
 	for fileScanner.Scan() {
-		nextLine := fileScanner.Text()
+				nextLine := fileScanner.Text()
 		entry := s.readEntry(nextLine)
 		ssTableEntrys = append(ssTableEntrys,entry)
 	}

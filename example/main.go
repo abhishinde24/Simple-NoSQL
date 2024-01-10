@@ -36,5 +36,5 @@ func main() {
 	if value == nil{
 		fmt.Printf("key %s is deleted \n","a1")
 	}
-
+	db.Close()
 }
